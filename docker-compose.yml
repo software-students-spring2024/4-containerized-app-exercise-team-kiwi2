@@ -1,0 +1,24 @@
+version: '3.7'
+
+services:
+  flask_app:
+    build:
+      context: ./web-app
+      dockerfile: Dockerfile
+    command: python -u app.py
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mongo_db
+    environment:
+      MONGO_URI: "mongodb://mongo_db:27017/mydatabase"
+
+  mongo_db:
+    image: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+volumes:
+  mongo_data:
