@@ -8,6 +8,7 @@ pylint = "*"
 black = "*"
 flask = "*"
 pymongo = "*"
+typing-extensions = "*"
 
 [dev-packages]
 
