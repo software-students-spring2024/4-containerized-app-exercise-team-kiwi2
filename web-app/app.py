@@ -1,5 +1,5 @@
+"""Module to import Flask and pymongo"""
 from flask import Flask, jsonify, render_template
-import pymongo
 from pymongo import MongoClient
 
 app = Flask(__name__)
@@ -12,11 +12,13 @@ users_collection = db.users
 
 @app.route('/')
 def ping_server():
+    """Function for home page"""
     return render_template('index.html')
 
 
 @app.route('/save_user', methods=['GET'])
 def save_user():
+    """Test function to save user"""
     user_data = {
         'name': 'Test User',
         'email': 'test@example.com'
@@ -27,6 +29,7 @@ def save_user():
 # Route to get one user
 @app.route('/get_user', methods=['GET'])
 def get_user():
+    """Test function to get user"""
     user = users_collection.find_one({'name': 'Test User'})
     if user:
         # Dump user data into JSON format
@@ -35,8 +38,7 @@ def get_user():
             'email': user['email']
         }
         return jsonify({'user': dumped_user}), 200
-    else:
-        return jsonify({'message': 'User not found'}), 404
+    return jsonify({'message': 'User not found'}), 404
 
 
 
