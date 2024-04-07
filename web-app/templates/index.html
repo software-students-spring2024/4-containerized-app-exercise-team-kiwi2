@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Location</title>
+</head>
+<body>
+    <h1>User Location</h1>
+    <p id="location"></p>
+
+    <script>
+          function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(showPosition, showError);
+            } else {
+                document.getElementById('location').innerHTML = "Geolocation is not supported by this browser.";
+            }
+        }
+
+        function showPosition(position) {
+            var latitude = position.coords.latitude;
+            var longitude = position.coords.longitude;
+            document.getElementById('location').innerHTML = "Latitude: " + latitude + "<br>Longitude: " + longitude;
+        }
+
+        function showError(error) {
+            switch (error.code) {
+                case error.PERMISSION_DENIED:
+                    document.getElementById('location').innerHTML = "User denied the request for Geolocation. Please enable location services.";
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    document.getElementById('location').innerHTML = "Location information is unavailable. Please check your device's location settings.";
+                    break;
+                case error.TIMEOUT:
+                    document.getElementById('location').innerHTML = "The request to get user location timed out. Please try again later.";
+                    break;
+                case error.UNKNOWN_ERROR:
+                    document.getElementById('location').innerHTML = "An unknown error occurred. Please try again later.";
+                    break;
+            }
+        }
+
+        // Call the getLocation function when the page is loaded
+        window.onload = getLocation;
+    </script>
+</body>
+</html>
