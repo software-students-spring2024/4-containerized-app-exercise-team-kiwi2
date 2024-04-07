@@ -19,6 +19,15 @@ services:
       - "27017:27017"
     volumes:
       - mongo_data:/data/db
+  
+  ml_client:
+    build:
+      context: ./machine-learning-client
+      dockerfile: Dockerfile
+    depends_on:
+      - mongo_db
+    environment:
+      MONGO_URI: "mongodb://mongo_db:27017/mydatabase"
 
 volumes:
   mongo_data:
