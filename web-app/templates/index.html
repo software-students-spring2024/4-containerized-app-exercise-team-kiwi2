@@ -10,6 +10,32 @@
     <p id="location"></p>
 
     <script>
+
+        function sendToServer(lat, long){
+            const url = '/save_location';
+            const requestOptions = {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                        latitude: lat,
+                        longitude: long
+                    })
+                };
+
+        fetch(url, requestOptions)
+            .then(response => {
+                return response.json();
+            })
+            .then(data => {
+                console.log('User data saved successfully:', data);
+            })
+
+
+                
+
+        }
           function getLocation() {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(showPosition, showError);
@@ -22,6 +48,8 @@
             var latitude = position.coords.latitude;
             var longitude = position.coords.longitude;
             document.getElementById('location').innerHTML = "Latitude: " + latitude + "<br>Longitude: " + longitude;
+
+             sendToServer(latitude, longitude)
         }
 
         function showError(error) {
