@@ -1,9 +1,9 @@
 """Module to get AI generated recommendations"""
 
-# import os
+import os
 import openai
 
-openai.my_api_key = "temp"  # api key goes here
+openai.my_api_key = os.environ.get("OPENAI_API_KEY")  # api key goes here
 
 LOCATION = "New York City"
 messages = [
