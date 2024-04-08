@@ -7,7 +7,7 @@ name = "pypi"
 pylint = "*"
 black = "*"
 openai = "*"
-os = "*"
+tomli = "*"
 
 [dev-packages]
 
