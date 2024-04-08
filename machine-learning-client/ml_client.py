@@ -1,7 +1,7 @@
 import openai
 import os
 
-openai.my_api_key = os.environ.get('OPENAI_API_KEY')
+openai.my_api_key = "temp" # api key goes here
 
 location = "New York City"
 messages = [ {"role": "system", "content":"You are an intelligent assistant."},
