@@ -8,6 +8,7 @@ pylint = "*"
 black = "*"
 openai = "*"
 tomli = "*"
+dill = "*"
 
 [dev-packages]
 
