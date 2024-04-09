@@ -9,7 +9,37 @@
     <h1>User Location</h1>
     <p id="location"></p>
 
+
+    <button id="ml_button" disabled=true onclick="fetchUserData()">Get Response</button>
+     <div id='user_local'></div>
+    <div id='ml_response'></div>
+
     <script>
+
+        function fetchUserData(){
+            fetch('/get_user')
+            .then(response => {
+                return response.json();
+            })
+            .then(data => {
+                console.log('User data:', data);
+                 document.getElementById('user_local').innerHTML =data.user.city + " " + data.user.region + " " + data.user.country;
+                 document.getElementById('ml_response').innerHTML =data.user.ml_response;
+            })
+        }
+
+        function addMlPart(){
+            fetch('http://127.0.0.1:5001/ml_result') 
+            .then(response => {
+                return response.json();
+            })
+            .then(data => {
+                console.log('ML Response', data);
+                
+                document.getElementById('ml_button').disabled = false;
+            })
+
+        }
 
         function sendToServer(lat, long){
             const url = '/save_location';
@@ -30,11 +60,9 @@
             })
             .then(data => {
                 console.log('User data saved successfully:', data);
+                addMlPart();
             })
-
-
                 
-
         }
           function getLocation() {
             if (navigator.geolocation) {
@@ -44,12 +72,14 @@
             }
         }
 
-        function showPosition(position) {
+        async function showPosition(position) {
             var latitude = position.coords.latitude;
             var longitude = position.coords.longitude;
-            document.getElementById('location').innerHTML = "Latitude: " + latitude + "<br>Longitude: " + longitude;
+            
+            sendToServer(latitude, longitude)
 
-             sendToServer(latitude, longitude)
+            document.getElementById('location').innerHTML = "Latitude: " + latitude + "<br>Longitude: " + longitude;
+         
         }
 
         function showError(error) {

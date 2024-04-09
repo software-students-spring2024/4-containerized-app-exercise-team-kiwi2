@@ -45,6 +45,7 @@ def save_location():
         "city": city,
         "region": region,
         "country": country,
+        "ml_response": "",
     }
 
     result = users_collection.insert_one(user_data)
@@ -59,6 +60,7 @@ def save_location():
 @app.route("/get_user", methods=["GET"])
 def get_user():
     """Function to get user info"""
+
     user = users_collection.find_one({"name": "Test User"})
     if user:
         # Dump user data into JSON format
@@ -69,6 +71,7 @@ def get_user():
             "city": user["city"],
             "region": user["region"],
             "country": user["country"],
+            "ml_response": user["ml_response"],
         }
         return jsonify({"user": dumped_user}), 200
     return jsonify({"message": "User not found"}), 404

@@ -1,1 +1,4 @@
 pymongo
+openai
+flask
+flask_cors

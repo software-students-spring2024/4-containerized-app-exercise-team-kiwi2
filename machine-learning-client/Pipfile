@@ -9,6 +9,9 @@ black = "*"
 openai = "*"
 tomli = "*"
 dill = "*"
+flask = "*"
+pymongo = "*"
+flask-cors = "*"
 
 [dev-packages]
 
