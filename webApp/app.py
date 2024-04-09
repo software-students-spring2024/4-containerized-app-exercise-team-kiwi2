@@ -33,42 +33,43 @@ def create_app(users_collection):
         region = data[0]["region"]
         country = data[0]["country"]
 
-        user_data = {
-            "name": "Test User",
-            "latitude": latitude,
-            "longitude": longitude,
-            "city": city,
-            "region": region,
-            "country": country,
+    user_data = {
+        "name": "Test User",
+        "latitude": latitude,
+        "longitude": longitude,
+        "city": city,
+        "region": region,
+        "country": country,
+        "ml_response": "",
+    }
+
+    result = users_collection.insert_one(user_data)
+
+    user_id = str(result.inserted_id)
+
+    response = {"message": "User data saved successfully", "user_id": user_id}
+    return jsonify(response), 200
+
+
+# Route to get one user
+@app.route("/get_user", methods=["GET"])
+def get_user():
+    """Function to get user info"""
+
+    user = users_collection.find_one({"name": "Test User"})
+    if user:
+        # Dump user data into JSON format
+        dumped_user = {
+            "name": user["name"],
+            "latitude": user["latitude"],
+            "longitude": user["longitude"],
+            "city": user["city"],
+            "region": user["region"],
+            "country": user["country"],
+            "ml_response": user["ml_response"],
         }
-
-        result = users_collection.insert_one(user_data)
-
-        user_id = str(result.inserted_id)
-
-        response = {"message": "User data saved successfully", "user_id": user_id}
-        return jsonify(response), 200
-
-
-    # Route to get one user
-    @app.route("/get_user", methods=["GET"])
-    def get_user():
-        """Function to get user info"""
-        user = users_collection.find_one({"name": "Test User"})
-        if user:
-            # Dump user data into JSON format
-            dumped_user = {
-                "name": user["name"],
-                "latitude": user["latitude"],
-                "longitude": user["longitude"],
-                "city": user["city"],
-                "region": user["region"],
-                "country": user["country"],
-            }
-            return jsonify({"user": dumped_user}), 200
-        return jsonify({"message": "User not found"}), 404
-    
-    return app
+        return jsonify({"user": dumped_user}), 200
+    return jsonify({"message": "User not found"}), 404
 
 
 if __name__ == "__main__":
