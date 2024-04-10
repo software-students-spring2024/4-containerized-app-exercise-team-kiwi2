@@ -14,11 +14,12 @@ coverage = "*"
 dill = "*"
 flask-Cors = "*"
 mongomock = "*"
-openai = "*"
 pytest = "*"
+openai = "*"
 tomli = "*"
+
 
 [dev-packages]
 
 [requires]
-python_version = "3"
+python_version = "3.11"

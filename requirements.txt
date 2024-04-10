@@ -1,8 +1,8 @@
 black
 coverage
 dill
-Flask
-Flask-Cors
+flask
+flask-Cors
 mongomock
 openai
 pylint
@@ -10,3 +10,4 @@ pymongo
 pytest
 requests
 typing_extensions
+tomli

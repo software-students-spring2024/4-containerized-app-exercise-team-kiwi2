@@ -24,7 +24,7 @@ services:
       - mongo_db
     environment:
       MONGO_URI: "mongodb://mongo_db:27017/mydatabase"
-      OPENAI_API_KEY: "{Replace with openai API key}"
+      OPENAI_API_KEY: "{Insert key here}"
 
   mongo_db:
     image: mongo
