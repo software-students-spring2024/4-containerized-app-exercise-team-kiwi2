@@ -10,6 +10,12 @@ flask = "*"
 pymongo = "*"
 typing-extensions = "*"
 requests = "*"
+coverage = "*"
+dill = "*"
+flask-Cors = "*"
+mongomock = "*"
+openai = "*"
+pytest = "*"
 
 [dev-packages]
 

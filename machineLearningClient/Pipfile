@@ -6,12 +6,16 @@ name = "pypi"
 [packages]
 pylint = "*"
 black = "*"
-openai = "*"
-tomli = "*"
-dill = "*"
 flask = "*"
 pymongo = "*"
-flask-cors = "*"
+typing-extensions = "*"
+requests = "*"
+coverage = "*"
+dill = "*"
+flask-Cors = "*"
+mongomock = "*"
+openai = "*"
+pytest = "*"
 
 [dev-packages]
 
