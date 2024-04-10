@@ -5,14 +5,14 @@ from pymongo import MongoClient
 import requests
 
 
-def create_app(users_collection):
+def create_app(collection):
+    """Create app with its functions"""
     app = Flask(__name__)
 
     @app.route("/")
     def ping_server():
         """Function for home page"""
         return render_template("index.html")
-
 
     @app.route("/save_location", methods=["POST"])
     def save_location():
@@ -43,20 +43,19 @@ def create_app(users_collection):
             "ml_response": "",
         }
 
-        result = users_collection.insert_one(user_data)
+        result = collection.insert_one(user_data)
 
         user_id = str(result.inserted_id)
 
         response = {"message": "User data saved successfully", "user_id": user_id}
         return jsonify(response), 200
 
-
     # Route to get one user
     @app.route("/get_user", methods=["GET"])
     def get_user():
         """Function to get user info"""
 
-        user = users_collection.find_one({"name": "Test User"})
+        user = collection.find_one({"name": "Test User"})
         if user:
             # Dump user data into JSON format
             dumped_user = {
@@ -79,5 +78,5 @@ if __name__ == "__main__":
     client = MongoClient(MONGO_URI)
     db = client.mydatabase
     users_collection = db.users
-    app = create_app(users_collection)
-    app.run(host="0.0.0.0", port=5000)
+    main_app = create_app(users_collection)
+    main_app.run(host="0.0.0.0", port=5000)

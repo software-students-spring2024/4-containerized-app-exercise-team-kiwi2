@@ -16,6 +16,7 @@ flask-Cors = "*"
 mongomock = "*"
 openai = "*"
 pytest = "*"
+tomli = "*"
 
 [dev-packages]
 

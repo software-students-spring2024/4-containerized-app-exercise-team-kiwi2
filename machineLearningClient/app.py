@@ -3,12 +3,13 @@
 import os
 from flask import Flask, jsonify
 from pymongo import MongoClient
-from flask_cors import CORS, cross_origin
+from flask_cors import cross_origin
 import openai
 
-def predict(user_loc, key):
+
+def predict(user_loc, openai_key):
     """Function to call openAI api and get result"""
-    openai.my_api_key = key
+    openai.my_api_key = openai_key
     location = user_loc
     messages = [
         {"role": "system", "content": "You are an intelligent assistant."},
@@ -18,26 +19,27 @@ def predict(user_loc, key):
     reply = chat.choices[0].message.content
     return reply
 
-def create_app(users_collection, key):
+
+def create_app(collection, api_key):
+    """Create the app and related functions"""
     app = Flask(__name__)
-    cors = CORS(app)
     app.config["CORS_HEADERS"] = "Content-Type"
 
     @app.route("/ml_result", methods=["GET"])
     @cross_origin()
     def machine_learning_client():
         """Function to generate Ml Part"""
-        user = users_collection.find_one({"name": "Test User"})
+        user = collection.find_one({"name": "Test User"})
         if user:
             user_loc = "" + user["city"] + user["region"] + user["country"]
-            ml_response = predict(user_loc, key)
+            ml_response = predict(user_loc, api_key)
             # Dump user data into JSON format
-            users_collection.update_one(
+            collection.update_one(
                 {"_id": user["_id"]}, {"$set": {"ml_response": ml_response}}
             )
             return jsonify({"message": "Ml Response Added"}), 200
         return jsonify({"message": "User not found"}), 404
-    
+
     return app
 
 
@@ -47,5 +49,5 @@ if __name__ == "__main__":
     db = client.mydatabase
     users_collection = db.users
     key = os.environ.get("OPENAI_API_KEY")
-    app = create_app(users_collection, key)
-    app.run(host="0.0.0.0", port=5001)
+    main_app = create_app(users_collection, key)
+    main_app.run(host="0.0.0.0", port=5001)
