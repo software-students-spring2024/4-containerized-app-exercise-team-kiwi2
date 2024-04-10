@@ -10,14 +10,27 @@ import openai
 def predict(user_loc, openai_key):
     """Function to call openAI api and get result"""
     openai.my_api_key = openai_key
-    location = user_loc
     messages = [
         {"role": "system", "content": "You are an intelligent assistant."},
-        {"role": "user", "content": "List the 5 best things to do in " + location},
+        {"role": "user", "content": "List the 5 best things to do in " + user_loc},
     ]
     chat = openai.chat.completions.create(messages=messages, model="gpt-3.5-turbo")
-    reply = chat.choices[0].message.content
-    return reply
+    if hasattr(chat, "choices"):
+        return chat.choices[0].message.content
+    return chat
+
+
+def get_key():
+    """Function to retreive key from environment"""
+    return os.environ.get("OPENAI_API_KEY")
+
+
+def init_app(db):
+    """Function to run the app"""
+    users = db.users
+    key = get_key()
+    main_app = create_app(users, key)
+    main_app.run(host="0.0.0.0", port=5001)
 
 
 def create_app(collection, api_key):
@@ -44,10 +57,4 @@ def create_app(collection, api_key):
 
 
 if __name__ == "__main__":
-    MONGO_URI = "mongodb://mongo_db:27017/mydatabase"
-    client = MongoClient(MONGO_URI)
-    db = client.mydatabase
-    users_collection = db.users
-    key = os.environ.get("OPENAI_API_KEY")
-    main_app = create_app(users_collection, key)
-    main_app.run(host="0.0.0.0", port=5001)
+    init_app(MongoClient("mongodb://mongo_db:27017/mydatabase").mydatabase.users)
