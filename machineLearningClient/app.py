@@ -6,22 +6,9 @@ from pymongo import MongoClient
 from flask_cors import CORS, cross_origin
 import openai
 
-
-app = Flask(__name__)
-cors = CORS(app)
-app.config["CORS_HEADERS"] = "Content-Type"
-
-MONGO_URI = "mongodb://mongo_db:27017/mydatabase"
-client = MongoClient(MONGO_URI)
-db = client.mydatabase
-users_collection = db.users
-
-
-def predict(user_loc):
-
+def predict(user_loc, key):
     """Function to call openAI api and get result"""
-    openai.my_api_key = os.environ.get("OPENAI_API_KEY")
-
+    openai.my_api_key = key
     location = user_loc
     messages = [
         {"role": "system", "content": "You are an intelligent assistant."},
@@ -31,25 +18,34 @@ def predict(user_loc):
     reply = chat.choices[0].message.content
     return reply
 
+def create_app(users_collection, key):
+    app = Flask(__name__)
+    cors = CORS(app)
+    app.config["CORS_HEADERS"] = "Content-Type"
 
-@app.route("/ml_result", methods=["GET"])
-@cross_origin()
-def machine_learning_client():
-
-    """Function to generate Ml Part"""
-    user = users_collection.find_one({"name": "Test User"})
-
-    user_loc = "" + user["city"] + user["region"] + user["country"]
-    ml_response = predict(user_loc)
-
-    if user:
-        # Dump user data into JSON format
-        users_collection.update_one(
-            {"_id": user["_id"]}, {"$set": {"ml_response": ml_response}}
-        )
-        return jsonify({"message": "Ml Response Added"}), 200
-    return jsonify({"message": "User not found"}), 404
+    @app.route("/ml_result", methods=["GET"])
+    @cross_origin()
+    def machine_learning_client():
+        """Function to generate Ml Part"""
+        user = users_collection.find_one({"name": "Test User"})
+        if user:
+            user_loc = "" + user["city"] + user["region"] + user["country"]
+            ml_response = predict(user_loc, key)
+            # Dump user data into JSON format
+            users_collection.update_one(
+                {"_id": user["_id"]}, {"$set": {"ml_response": ml_response}}
+            )
+            return jsonify({"message": "Ml Response Added"}), 200
+        return jsonify({"message": "User not found"}), 404
+    
+    return app
 
 
 if __name__ == "__main__":
+    MONGO_URI = "mongodb://mongo_db:27017/mydatabase"
+    client = MongoClient(MONGO_URI)
+    db = client.mydatabase
+    users_collection = db.users
+    key = os.environ.get("OPENAI_API_KEY")
+    app = create_app(users_collection, key)
     app.run(host="0.0.0.0", port=5001)

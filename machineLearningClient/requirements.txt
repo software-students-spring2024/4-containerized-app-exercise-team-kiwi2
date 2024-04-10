@@ -1,4 +1,12 @@
-pymongo
+black
+coverage
+dill
+Flask
+Flask-Cors
+mongomock
 openai
-flask
-flask_cors
+pylint
+pymongo
+pytest
+requests
+typing_extensions
