@@ -26,7 +26,7 @@ def get_key():
 
 
 def init_app(db):
-    """Function to initialize the app from environment"""
+    """Function to run the app"""
     users = db.users
     key = get_key()
     main_app = create_app(users, key)
