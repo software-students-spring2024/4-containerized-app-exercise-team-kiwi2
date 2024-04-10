@@ -2,7 +2,7 @@ import pytest
 import openai
 from flask import Flask
 from mongomock import MongoClient
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch
 from machineLearningClient.app import create_app, predict, get_key, init_app
 
 
