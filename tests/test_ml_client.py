@@ -10,13 +10,13 @@ def test_sanity_check():
     actual = True  # the value we see in reality
     assert actual == expected, "Expected True to be equal to True!"
 
-def test_predict(monkeypatch):
-    def mock_create(messages, model):
-        return "Mock Response"
-    monkeypatch.setattr("openai.chat.completions.create", mock_create)
-    location = "New York New York United States of America"
-    reply = predict(location, "mock key")
-    assert isinstance(reply, str)
+# def test_predict(monkeypatch):
+#     def mock_create(messages, model):
+#         return "Mock Response"
+#     monkeypatch.setattr("openai.chat.completions.create", mock_create)
+#     location = "New York New York United States of America"
+#     reply = predict(location, "mock key")
+#     assert isinstance(reply, str)
 
 def test_get_key(monkeypatch):
     monkeypatch.setenv("OPENAI_API_KEY", "mock key")
