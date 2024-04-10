@@ -18,7 +18,7 @@ def db():
     client.drop_database(db)
 
 
-def test_ML_client(db):
+def test_ML_client(db, monkeypatch):
     user_data = {
         "name": "Test User",
         "latitude": 40,
@@ -29,14 +29,17 @@ def test_ML_client(db):
         "ml_response": "",
     }
     db.insert_one(user_data)
-    app = create_app(db, os.environ.get("OPENAI_API_KEY"))
+    def mock_predict(user_loc, openai_key):
+        return "Mock ML Response"
+    monkeypatch.setattr("machineLearningClient.app.predict", mock_predict)
+    app = create_app(db, "mock key")
     app.config["TESTING"] = True
     client = app.test_client()
     response = client.get("/ml_result")
     assert response.status_code == 200
 
 
-def test_ML_client_fail(db):
+def test_ML_client_fail(db, monkeypatch):
     user_data = {
         "name": "Test",
         "latitude": 40,
@@ -47,7 +50,10 @@ def test_ML_client_fail(db):
         "ml_response": "",
     }
     db.insert_one(user_data)
-    app = create_app(db, os.environ.get("OPENAI_API_KEY"))
+    def mock_predict(user_loc, openai_key):
+        return "Mock ML Response"
+    monkeypatch.setattr("machineLearningClient.app.predict", mock_predict)
+    app = create_app(db, "mock key")
     app.config["TESTING"] = True
     client = app.test_client()
     response = client.get("/ml_result")
