@@ -19,7 +19,7 @@ jobs:
           pip install --user pipenv
           pipenv --python ${{ matrix.python-version }}
           pip install pytest mongomock
-          pipenv install
+          pip install -r requirements.txt
       - name: Turn on 'editable' mode
         run: |
           pipenv install -e .

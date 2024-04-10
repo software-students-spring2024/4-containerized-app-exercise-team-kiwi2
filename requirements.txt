@@ -1,0 +1,13 @@
+black
+coverage
+dill
+flask
+flask-Cors
+mongomock
+openai
+pylint
+pymongo
+pytest
+requests
+typing_extensions
+tomli
