@@ -14,8 +14,9 @@ coverage = "*"
 dill = "*"
 flask-Cors = "*"
 mongomock = "*"
-openai = "*"
 pytest = "*"
+openai = "*"
+
 
 [dev-packages]
 
