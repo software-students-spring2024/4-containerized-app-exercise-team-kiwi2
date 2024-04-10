@@ -1,4 +1,5 @@
 import pytest
+import openai
 from flask import Flask
 from mongomock import MongoClient
 from unittest.mock import patch, MagicMock
@@ -9,14 +10,6 @@ def test_sanity_check():
     expected = True  # the value we expect to be present
     actual = True  # the value we see in reality
     assert actual == expected, "Expected True to be equal to True!"
-
-# def test_predict(monkeypatch):
-#     def mock_create(messages, model):
-#         return "Mock Response"
-#     monkeypatch.setattr("openai.chat.completions.create", mock_create)
-#     location = "New York New York United States of America"
-#     reply = predict(location, "mock key")
-#     assert isinstance(reply, str)
 
 def test_get_key(monkeypatch):
     monkeypatch.setenv("OPENAI_API_KEY", "mock key")
@@ -44,7 +37,9 @@ def test_init_app(db, monkeypatch):
     def mock_predict(user_loc, openai_key):
         return "Mock ML Response"
     monkeypatch.setattr("machineLearningClient.app.predict", mock_predict)
-    assert isinstance(init_app(db), Flask)
+    with patch('flask.Flask.run') as mock_run:
+        init_app(db)
+    mock_run.assert_called_once_with(host="0.0.0.0", port=5001)
 
 def test_ML_client(db, monkeypatch):
     user_data = {
