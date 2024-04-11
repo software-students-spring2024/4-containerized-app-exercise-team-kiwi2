@@ -26,5 +26,23 @@ jobs:
       - name: Test with pytest
         run: |
           python3 -m pytest
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Docker Environment
+        uses: actions/checkout@v3
+        run: docker-compose up -d
+      - name: Deploy Flask app
+        uses: actions/ssh-action@v1
+        with:
+          host: ${{secrets.SSH_HOST}}
+          key: ${{secrets.SSH_KEY}}
+          username: ${{secrets.SSH_USERNAME}}
+
+          script: |
+            mkdir test
+            cd test
+            git clone https://github.com/software-students-spring2024/4-containerized-app-exercise-team-kiwi2
+            echo 'Deployment successful to digital ocean'
 
             
