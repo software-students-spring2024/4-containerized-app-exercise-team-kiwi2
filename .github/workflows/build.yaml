@@ -36,7 +36,7 @@ jobs:
       - name: Build and Deploy
         run: docker-compose up --build -d
       - name: Deploy Flask app
-        uses: appleboy/ssh-action@v1
+        uses: appleboy/ssh-action@master
         with:
           host: ${{secrets.SSH_HOST}}
           key: ${{secrets.SSH_KEY}}
