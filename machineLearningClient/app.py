@@ -57,4 +57,4 @@ def create_app(collection, api_key):
 
 
 if __name__ == "__main__":
-    init_app(MongoClient("mongodb://mongo_db:27017/mydatabase").mydatabase.users)
+    init_app(MongoClient("mongodb://mongo_db:27017/mydatabase").mydatabase)
