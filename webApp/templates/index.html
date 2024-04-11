@@ -14,7 +14,7 @@
 
     <button id="ml_button" disabled=true onclick="fetchUserData()">Get Response</button>
      <div id='user_local'></div>
-    <div id='ml_response'></div>
+     <ol id='ml_response'></ol>
     
     </div>
 
@@ -26,9 +26,18 @@
                 return response.json();
             })
             .then(data => {
-                console.log('User data:', data);
+                 console.log('User data:', data);
                  document.getElementById('user_local').innerHTML =data.user.city + " " + data.user.region + " " + data.user.country;
-                 document.getElementById('ml_response').innerHTML =data.user.ml_response;
+                 let formatted_ml_response = (data.user.ml_response.split(/(?:1\.|2\.|3\.|4\.|5\.)/));
+                 let response = document.getElementById('ml_response');
+                 response.innerHTML = '';
+                 formatted_ml_response.forEach((item, index) => {
+                    let recom = document.createElement('li');
+                    recom.textContent = item.trim();
+                    if (index > 0) {
+                        response.appendChild(recom);
+                    }
+                });
             })
         }
 

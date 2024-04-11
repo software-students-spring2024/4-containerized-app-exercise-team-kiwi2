@@ -56,11 +56,11 @@ button:hover {
 }
 
 #ml_response {
+    list-style-type: decimal;
     font-weight: 550;
     margin-top: 10px;
     padding-right: 140px;
     padding-left: 140px;
-    text-align: center;
 }
 
 /* Styling for error messages */
